@@ -1,0 +1,9 @@
+{
+  "body": {
+    "userName" : "testUser",
+    "password" : "testPassword",
+    "email" : "test@test.com",
+    "firstName": "John",
+    "lastName": "Doe"
+  }
+}

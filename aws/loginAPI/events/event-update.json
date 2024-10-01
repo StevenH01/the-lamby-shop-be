@@ -1,0 +1,8 @@
+{
+    "pathParameters": {
+       "email":"test@test.com"
+    },
+    "body": {
+        "password" : "testPassword123"
+    }
+}

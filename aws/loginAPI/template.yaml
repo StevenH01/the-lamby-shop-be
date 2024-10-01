@@ -1,0 +1,186 @@
+# This is the SAM template that represents the architecture of your serverless application
+# https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-template-basics.html
+
+# The AWSTemplateFormatVersion identifies the capabilities of the template
+# https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/format-version-structure.html
+AWSTemplateFormatVersion: 2010-09-09
+Description: >-
+  sam-app
+
+# Transform section specifies one or more macros that AWS CloudFormation uses to process your template
+# https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/transform-section-structure.html
+Transform:
+- AWS::Serverless-2016-10-31
+
+# Resources declares the AWS resources that you want to include in the stack
+# https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/resources-section-structure.html
+Resources:
+
+  # This is a Lambda function config associated with the source code: delete-by-id.js
+  deleteLoginFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: handlers/delete-login.deleteItemHandler
+      Runtime: nodejs18.x
+      Architectures:
+        - x86_64
+      MemorySize: 128
+      Timeout: 100
+      Description: A simple example includes a HTTP get method to get one item by id from a DynamoDB table.
+      Environment:
+        Variables:
+          # Make table name accessible as environment variable from function code during execution
+          SAMPLE_TABLE: !Ref loginTable
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /users/{email}
+            Method: DELETE
+      Policies:
+        - arn:aws:iam::aws:policy/AmazonS3FullAccess
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+        # Give Create/Read/Update/Delete Permissions to the loginTable
+        - DynamoDBCrudPolicy:
+            TableName: !Ref loginTable
+  # Each Lambda function is defined by properties:
+  # https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+
+  # This is a Lambda function config associated with the source code: get-all-citizens.js
+  getAllLoginsFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: handlers/get-all-logins.getAllItemsHandler
+      Runtime: nodejs18.x
+      Architectures:
+        - x86_64
+      MemorySize: 128
+      Timeout: 100
+      Description: A simple example includes a HTTP get method to get all items from a DynamoDB table.
+      Environment:
+        Variables:
+          # Make table name accessible as environment variable from function code during execution
+          SAMPLE_TABLE: !Ref loginTable
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /users
+            Method: GET
+      Policies:
+        - arn:aws:iam::aws:policy/AmazonS3FullAccess
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+        # Give Create/Read/Update/Delete Permissions to the loginTable
+        - DynamoDBCrudPolicy:
+            TableName: !Ref loginTable
+  # Each Lambda function is defined by properties:
+  # https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+
+  # This is a Lambda function config associated with the source code: get-by-id.js
+  getLoginFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: handlers/get-login.getItemHandler
+      Runtime: nodejs18.x
+      Architectures:
+        - x86_64
+      MemorySize: 128
+      Timeout: 100
+      Description: A simple example includes a HTTP get method to get one item by id from a DynamoDB table.
+      Environment:
+        Variables:
+          # Make table name accessible as environment variable from function code during execution
+          SAMPLE_TABLE: !Ref loginTable
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /users/{email}
+            Method: GET
+      Policies:
+        - arn:aws:iam::aws:policy/AmazonS3FullAccess
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+        # Give Create/Read/Update/Delete Permissions to the loginTable
+        - DynamoDBCrudPolicy:
+            TableName: !Ref loginTable
+      
+  # Each Lambda function is defined by properties:
+  # https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+
+  # This is a Lambda function config associated with the source code: add-item.js
+  addLoginFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: handlers/add-login.addItemHandler
+      Runtime: nodejs18.x
+      Architectures:
+        - x86_64
+      MemorySize: 128
+      Timeout: 100
+      Description: A simple example includes a HTTP post method to add one item to a DynamoDB table.
+      
+      Environment:
+        Variables:
+          # Make table name accessible as environment variable from function code during execution
+          SAMPLE_TABLE: !Ref loginTable
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /users
+            Method: POST
+      Policies:
+        # Give Create/Read/Update/Delete Permissions to the loginTable
+        - arn:aws:iam::aws:policy/AmazonS3FullAccess
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+        - DynamoDBCrudPolicy:
+            TableName: !Ref loginTable
+  # Simple syntax to create a DynamoDB table with a single attribute primary key, more in
+  # https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlesssimpletable
+
+  # This is a Lambda function config associated with the source code: update-item.js
+  updateLoginFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: handlers/update-login.updateItemHandler
+      Runtime: nodejs18.x
+      Architectures:
+        - x86_64
+      MemorySize: 128
+      Timeout: 100
+      Description: A simple example includes a HTTP post method to update one item to a DynamoDB table.
+      Environment:
+        Variables:
+          # Make table name accessible as environment variable from function code during execution
+          SAMPLE_TABLE: !Ref loginTable
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /users/{email}
+            Method: PUT
+      Policies:
+        - arn:aws:iam::aws:policy/AmazonS3FullAccess
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+        # Give Create/Read/Update/Delete Permissions to the logiinTable
+        - DynamoDBCrudPolicy:
+            TableName: !Ref loginTable
+  # Simple syntax to create a DynamoDB table with a single attribute primary key, more in
+  # https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlesssimpletable
+
+  # DynamoDB table to store item
+  loginTable:
+    Type: AWS::Serverless::SimpleTable
+    Properties:
+      TableName: loginTable
+      PrimaryKey:
+        Name: email
+        Type: String
+      ProvisionedThroughput:
+        ReadCapacityUnits: 2
+        WriteCapacityUnits: 2
+
+# Outputs:
+#   WebEndpoint:
+#     Description: "API Gateway endpoint URL for Prod stage"
+#     Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/"
