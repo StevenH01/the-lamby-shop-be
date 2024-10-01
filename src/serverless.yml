@@ -1,0 +1,20 @@
+service: lamby-shop-backend
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+
+functions:
+  stripeWebhook:
+    handler: src/app.handleStripeWebhook
+    events:
+      - http:
+          path: stripe/webhook
+          method: post
+
+  stripePayment:
+    handler: src/app.processPayment
+    events:
+      - http:
+          path: stripe/payment
+          method: post

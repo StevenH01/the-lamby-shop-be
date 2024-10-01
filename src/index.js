@@ -1,17 +1,23 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+const express = require('express');
+const cors = require('cors');  // Optional: Use if you're allowing cross-origin requests
+const stripeRoutes = require('./routes/stripeRoutes');  // Import stripe route
+const userRoutes = require('./routes/userRoutes');      // Import user routes (optional)
+const productRoutes = require('./routes/productRoutes');  // Import product routes (optional)
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
-);
+// Initialize the Express app
+const app = express();
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
+// Middleware
+app.use(express.json());
+app.use(cors());  // Enable CORS if frontend and backend are hosted on different domains
+
+// Routes
+app.use('/api/stripe', stripeRoutes);   // Stripe API routes mounted at /api/stripe
+app.use('/api/users', userRoutes);      // User API routes (optional)
+app.use('/api/products', productRoutes);  // Product API routes (optional)
+
+// Start the server
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
+});
