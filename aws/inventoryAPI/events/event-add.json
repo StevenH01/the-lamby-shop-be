@@ -1,7 +1,7 @@
 {
   "body": {
     "itemName" : "Star Bunny",
-    "imageKey" : "s3://thelambyshop-images/items/blue_bunny.jpeg",
+    "imageKey" : "items/blue_bunny.jpeg",
     "itemDescription" : "A handmade, crochet beanie accessorized with adorable bunny ears in a starlight theme.",
     "itemPrice" : "40.00"
   }

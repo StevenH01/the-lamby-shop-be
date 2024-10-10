@@ -29,10 +29,11 @@ export const addItemHandler = async (event) => {
     }
     // When testing with local JSON file, don't use JSON.parse()
     // const payload = event.body;
-
+    
     // Log payload in CloudWatch for potential issues
     console.info('Logging payload:', JSON.stringify(payload));
-
+    payload.itemName = decodeURIComponent(payload.itemName);
+    console.log("decodedURI Name= ", payload.itemName);
     // try {
     //   var bucket = process.env.S3_BUCKET;
     //   var portraitkey = calculatedNumber + "_portrait.txt";
@@ -84,10 +85,11 @@ export const addItemHandler = async (event) => {
 
     const response = {
         statusCode: 200,
-        // responseId: responseId,
-        // documentNumber: generatedNumber,
-        // error: errorArray
-        // body: JSON.stringify(item)
+        headers: {
+            "Access-Control-Allow-Origin": "*",  // Allow all domains, or specify your domain here
+            "Access-Control-Allow-Headers": "Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token",
+            "Access-Control-Allow-Methods": "GET,POST,PUT,DELETE,OPTIONS",  // Specify the allowed methods
+        },
         body: JSON.stringify({ itemName: payload.itemName })
     };
 

@@ -1,0 +1,7 @@
+{
+    "httpMethod": "POST",
+    "body": {
+        "paymentMethodId" : "pm_card_visa",
+        "amount" : "50"
+    }
+}

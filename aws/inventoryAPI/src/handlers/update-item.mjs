@@ -68,7 +68,12 @@ export const updateItemHandler = async (event) => {
         // responseId: responseId,
         // documentNumber: retrievedNumber,
         // error: errorArray
-        headers: { "Content-Type": "application/json" },
+        // headers: { "Content-Type": "application/json" },
+        headers: {
+            "Access-Control-Allow-Origin": "*",  // Allow all domains, or specify your domain here
+            "Access-Control-Allow-Headers": "Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token",
+            "Access-Control-Allow-Methods": "GET,POST,PUT,DELETE,OPTIONS",  // Specify the allowed methods
+        },
         body: JSON.stringify({ itemName: itemName, errors: errorArray })
     };
 

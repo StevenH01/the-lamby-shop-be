@@ -22,12 +22,16 @@ export const deleteItemHandler = async (event) => {
   // Retrieve documentNumber from path parameters
   const isRunningLocally = process.env.AWS_SAM_LOCAL;
   var itemName;
-  if (isRunningLocally == 'false') {
-    itemName = JSON.parse(event.pathParameters.itemName);
-  }
-  else {
+  if (isRunningLocally) {
     itemName = event.pathParameters.itemName;
   }
+  else {
+    // itemName = JSON.parse(event.pathParameters.itemName);
+    itemName = event.pathParameters.itemName;
+  }
+  itemName = decodeURIComponent(itemName);
+  console.log("decodedURI Name= ", itemName);
+  
   // Echo the the value of "requestId" from the request header into "responseId"
   // var responseId = event.headerParameters.requestId;
 
@@ -51,8 +55,13 @@ export const deleteItemHandler = async (event) => {
  
   const response = {
     statusCode: 200,
-    // responseId: responseId,
-};
+    headers: {
+      "Access-Control-Allow-Origin": "*",  // Allow all domains, or specify your domain here
+      "Access-Control-Allow-Headers": "Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token",
+      "Access-Control-Allow-Methods": "GET,POST,PUT,DELETE,OPTIONS",  // Specify the allowed methods
+    },
+    body: JSON.stringify({ message: `Successfully deleted item: ${itemName}` }),
+  };
  
   // All log statements are written to CloudWatch
   console.info(`statusCode: ${response.statusCode}`);
